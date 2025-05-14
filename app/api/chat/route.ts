@@ -25,6 +25,8 @@ export async function POST(req: Request) {
       role: "assistant",
       content: SYSTEM_PROMPT,
     });
+  } else {
+    threadId = `thread_${sessionId}`;
   }
 
   // Add user's message to the thread
@@ -58,7 +60,7 @@ export async function POST(req: Request) {
 
   return NextResponse.json({
     reply: responseText,
-    sessionId: threadId,
+    sessionId: threadId.split("_")[1],
   });
 }
 
@@ -70,7 +72,9 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const messages = await openai.beta.threads.messages.list(sessionId);
+    const messages = await openai.beta.threads.messages.list(
+      `thread_${sessionId}`
+    );
 
     const parsed = messages.data
       .reverse() // Chronological order

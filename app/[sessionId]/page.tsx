@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { IoSend } from "react-icons/io5";
 import { useRouter, useParams } from "next/navigation";
+import { getSupportBySessionId } from "../func/support";
 
 type Chat = { type: "user" | "assistant"; text: string };
 
@@ -15,7 +16,7 @@ export default function ChatPage() {
   const router = useRouter();
   const params = useParams();
   const sessionId = params?.sessionId as string;
-
+  const support = getSupportBySessionId(sessionId!)
   const sendMessageToAssistant = async (message: string) => {
     setLoading(true);
     const res = await fetch("/api/chat", {
@@ -51,14 +52,14 @@ export default function ChatPage() {
     if (last?.type === "user") {
       const timeout = setTimeout(() => {
         sendMessageToAssistant(last.text);
-      }, 1500);
+      }, Math.floor(Math.random() * 10000) + 10000);
       return () => clearTimeout(timeout);
     }
   }, [messages]);
 
   const Avatar = ({ type }: { type: "user" | "assistant" }) => (
     <Image
-      src={type === "user" ? "/mark.jpg" : "/elon.jpeg"}
+      src={type === "user" ? "/person.png" : support.img}
       alt={`${type} avatar`}
       className="w-8 h-8 rounded-full object-cover shadow-md"
       height={80}
@@ -66,19 +67,40 @@ export default function ChatPage() {
     />
   );
 
+  const parseTextWithLinks = (text: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = text.split(urlRegex);
+
+    return parts.map((part, i) =>
+      urlRegex.test(part) ? (
+        <a
+          key={i}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-green-600 underline break-words"
+        >
+          {part}
+        </a>
+      ) : (
+        <span key={i}>{part}</span>
+      )
+    );
+  };
+
   return (
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] items-center flex">
       <div className="w-full h-lvh sm:max-w-xl sm:h-[90vh] sm:mx-auto bg-[var(--secondary)] shadow-2xl sm:rounded-2xl overflow-hidden flex flex-col border border-gray-300">
-        {/* Header with logo */}
+        {/* Header */}
         <div className="px-6 py-4 border-b border-gray-300">
           <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition">
-            <Image src="/elon.jpeg" alt="Company Logo" width={32} height={32} className="rounded" />
-            <span className="font-semibold text-lg text-[var(--primary)]">Kali Supplements</span>
+            <Image src={support.img} alt="Logo" width={32} height={32} className="rounded" />
+            <span className="font-semibold text-lg text-[var(--primary)]">{support.name}</span>
           </Link>
         </div>
 
-        {/* Message area */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-5 scrollbar-thin scrollbar-thumb-[#ccc]">
+        {/* Chat Area */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-[#ccc]">
           {!sessionId && !loading && (
             <div className="flex flex-col items-center justify-center h-full text-center text-sm text-gray-500 space-y-4">
               <p className="max-w-sm">
@@ -87,14 +109,13 @@ export default function ChatPage() {
               </p>
               <button
                 onClick={() => router.push("/")}
-                className="cursor-pointer bg-[var(--primary)] hover:bg-green-700 text-white px-6 py-2 rounded-full text-sm transition-colors shadow-md"
+                className="bg-[var(--primary)] hover:bg-green-700 text-white px-6 py-2 rounded-full text-sm transition-colors shadow-md"
               >
                 Back to Homepage
               </button>
             </div>
           )}
 
-          {/* Loading spinner while fetching */}
           {loading && !messages.length && (
             <div className="flex justify-center items-center h-full">
               <div className="w-8 h-8 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin" />
@@ -108,16 +129,17 @@ export default function ChatPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                className={`flex items-end gap-3 ${msg.type === "user" ? "justify-end flex-row-reverse" : "justify-start"}`}
+                className={`flex gap-2 items-end ${msg.type === "user" ? "self-end flex-row-reverse" : "self-start"
+                  }`}
               >
-                <Avatar type={msg.type} />
+                {msg.type === "assistant" && <Avatar type={msg.type} />}
                 <div
                   className={`px-4 py-3 text-sm max-w-xs rounded-2xl shadow-md ${msg.type === "user"
                     ? "bg-[var(--primary)] text-white rounded-br-none"
                     : "bg-[var(--card)] text-[var(--foreground)] rounded-bl-none"
                     }`}
                 >
-                  {msg.text}
+                  {parseTextWithLinks(msg.text)}
                 </div>
               </motion.div>
             ))}
@@ -126,17 +148,22 @@ export default function ChatPage() {
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="flex items-center gap-3 justify-start"
+                className="flex gap-2 items-end self-start"
               >
                 <Avatar type="assistant" />
-                <div className="px-4 py-3 text-sm bg-[var(--card)] text-[var(--foreground)] rounded-2xl rounded-bl-none shadow-md">
-                  Typing...
+                <div className="px-4 py-3 bg-[var(--card)] text-[var(--foreground)] rounded-2xl rounded-bl-none shadow-md">
+                  <div className="flex items-center gap-1">
+                    <span className="w-2 h-2 bg-[var(--primary)] rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                    <span className="w-2 h-2 bg-[var(--primary)] rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                    <span className="w-2 h-2 bg-[var(--primary)] rounded-full animate-bounce"></span>
+                  </div>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
+        {/* Input Box */}
         {sessionId && (
           <form className="flex items-center p-4 border-t border-gray-300 bg-[var(--secondary)]">
             <input

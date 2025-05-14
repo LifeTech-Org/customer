@@ -10,23 +10,24 @@ export default function HomePage() {
 
     const handleStart = async () => {
         setWaiting(true);
+        setTimeout(async () => {
+            const res = await fetch("/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: "Hi" }),
+            });
 
-        const res = await fetch("/api/chat", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ message: "Hi" }),
-        });
+            const data = await res.json();
+            const sessionId = data.sessionId;
 
-        const data = await res.json();
-        const sessionId = data.sessionId;
-
-        if (sessionId) {
-            setWaiting(false);
-            router.push(`/${sessionId}`);
-        } else {
-            alert("Failed to start chat session");
-            setWaiting(false);
-        }
+            if (sessionId) {
+                setWaiting(false);
+                router.push(`/${sessionId}`);
+            } else {
+                alert("Failed to start chat session");
+                setWaiting(false);
+            }
+        }, Math.floor(Math.random() * 15000) + 20000)
     };
 
     return (
