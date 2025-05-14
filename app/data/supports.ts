@@ -1,10 +1,10 @@
 export const supports = [
   {
-    name: "Emma Watson",
+    name: "Emma",
     img: "/elon.jpeg",
   },
   {
-    name: "Ryan Reynolds",
+    name: "Ryan",
     img: "/mark.jpg",
   },
   {
@@ -12,11 +12,11 @@ export const supports = [
     img: "/elon.jpeg",
   },
   {
-    name: "Chris Hemsworth",
+    name: "Chris",
     img: "/mark.jpg",
   },
   {
-    name: "Scarlett Johansson",
+    name: "Scarlett",
     img: "/elon.jpeg",
   },
 ];

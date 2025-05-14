@@ -2,11 +2,12 @@
 // app/api/chat/route.ts
 import { OpenAI } from "openai";
 import { NextRequest, NextResponse } from "next/server";
+import { getSupportBySessionId } from "@/app/func/support";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-const SYSTEM_PROMPT = `
-Hi there — welcome to Kali Supplements! My name is KaliBot, and I'm here to guide you. 
+const SYSTEM_PROMPT = (name: string) => `
+Hi there — welcome to Kali Supplements! My name is ${name}, and I'm here to guide you. 
 Let's see if our Longevity Formula is right for you.
 I'll ask you a few quick questions. Ready?
 `;
@@ -23,7 +24,9 @@ export async function POST(req: Request) {
 
     await openai.beta.threads.messages.create(threadId, {
       role: "assistant",
-      content: SYSTEM_PROMPT,
+      content: SYSTEM_PROMPT(
+        getSupportBySessionId(thread.id.split("_")[1]).name
+      ),
     });
   } else {
     threadId = `thread_${sessionId}`;

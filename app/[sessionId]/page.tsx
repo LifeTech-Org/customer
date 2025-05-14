@@ -92,12 +92,19 @@ export default function ChatPage() {
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] items-center flex">
       <div className="w-full h-lvh sm:max-w-xl sm:h-[90vh] sm:mx-auto bg-[var(--secondary)] shadow-2xl sm:rounded-2xl overflow-hidden flex flex-col border border-gray-300">
         {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-300">
+        <div className="px-6 py-4 border-b border-gray-300 flex items-center justify-between">
+          {/* Company Logo (left) */}
           <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition">
-            <Image src={support.img} alt="Logo" width={32} height={32} className="rounded" />
-            <span className="font-semibold text-lg text-[var(--primary)]">{support.name}</span>
+            <Image src="/kali.avif" alt="Kali Supplements Logo" width={32} height={32} />
+            <span className="font-semibold text-lg text-[var(--primary)]">Kali</span>
           </Link>
+          {/* Customer Support Profile (right) */}
+          <div className="flex items-center space-x-2">
+            <span className="font-medium text-sm text-gray-700">{support.name}</span><Image src={support.img} alt={support.name} width={32} height={32} className="rounded-full" />
+
+          </div>
         </div>
+
 
         {/* Chat Area */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-[#ccc]">

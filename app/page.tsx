@@ -37,7 +37,7 @@ export default function HomePage() {
                 {/* Header */}
                 <div className="px-6 py-4 border-b border-gray-300">
                     <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition">
-                        <Image src="/elon.jpeg" alt="Company Logo" width={32} height={32} className="rounded" />
+                        <Image src="/kali.avif" alt="Company Logo" width={32} height={32} className="rounded" />
                         <span className="font-semibold text-lg text-[var(--primary)]">Kali Supplements</span>
                     </Link>
                 </div>
