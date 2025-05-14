@@ -27,7 +27,7 @@ export default function HomePage() {
                 alert("Failed to start chat session");
                 setWaiting(false);
             }
-        }, Math.floor(Math.random() * 15000) + 20000)
+        }, Math.floor(Math.random() * 10000))
     };
 
     return (
@@ -35,21 +35,21 @@ export default function HomePage() {
             <div className="w-full h-lvh sm:max-w-xl sm:h-auto sm:mx-auto bg-[var(--secondary)] shadow-2xl sm:rounded-2xl overflow-hidden flex flex-col border border-gray-300">
 
                 {/* Header */}
-                <div className="px-6 py-4 border-b border-gray-300">
+                <div className="px-6 py-4 flex justify-center border-b border-gray-300">
                     <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition">
-                        <Image src="/kali.avif" alt="Company Logo" width={32} height={32} className="rounded" />
-                        <span className="font-semibold text-lg text-[var(--primary)]">Kali Supplements</span>
+                        <Image src="/kali.avif" alt="Company Logo" width={100} height={60} className="rounded" />
+                        {/* <span className="font-bold text-lg text-[var(--primary)]">Kali Supplements</span> */}
                     </Link>
                 </div>
 
                 {/* Body Content */}
                 <div className="flex-1 p-6 space-y-6 flex flex-col justify-center items-center text-center">
-                    <h1 className="text-xl font-semibold text-[var(--primary)]">
-                        👋 Welcome to Kali Supplements
+                    <h1 className="text-xl font-bold text-[var(--primary)] underline">
+                        Longetivity Pre-Qualification
                     </h1>
                     <p className="text-sm text-gray-600 max-w-sm">
                         We typically respond within{" "}
-                        <span className="text-[var(--primary)] font-medium">2 minutes</span>. Click below to start chatting with us!
+                        <span className="text-[var(--primary)] font-medium">30 seconds</span>. Click below to start chatting with us!
                     </p>
 
                     <button

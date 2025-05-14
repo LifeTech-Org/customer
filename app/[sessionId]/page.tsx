@@ -16,7 +16,8 @@ export default function ChatPage() {
   const router = useRouter();
   const params = useParams();
   const sessionId = params?.sessionId as string;
-  const support = getSupportBySessionId(sessionId!)
+  const support = getSupportBySessionId(sessionId!);
+
   const sendMessageToAssistant = async (message: string) => {
     setLoading(true);
     const res = await fetch("/api/chat", {
@@ -52,7 +53,7 @@ export default function ChatPage() {
     if (last?.type === "user") {
       const timeout = setTimeout(() => {
         sendMessageToAssistant(last.text);
-      }, Math.floor(Math.random() * 10000) + 10000);
+      }, Math.floor(Math.random() * 3000) + 2000);
       return () => clearTimeout(timeout);
     }
   }, [messages]);
@@ -61,16 +62,16 @@ export default function ChatPage() {
     <Image
       src={type === "user" ? "/person.png" : support.img}
       alt={`${type} avatar`}
-      className="w-8 h-8 rounded-full object-cover shadow-md"
+      className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover shadow"
       height={80}
       width={80}
+      objectFit="cover"
     />
   );
 
   const parseTextWithLinks = (text: string) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
     const parts = text.split(urlRegex);
-
     return parts.map((part, i) =>
       urlRegex.test(part) ? (
         <a
@@ -89,43 +90,26 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] items-center flex">
-      <div className="w-full h-lvh sm:max-w-xl sm:h-[90vh] sm:mx-auto bg-[var(--secondary)] shadow-2xl sm:rounded-2xl overflow-hidden flex flex-col border border-gray-300">
-        {/* Header */}
-        <div className="px-6 py-4 border-b border-gray-300 flex items-center justify-between">
-          {/* Company Logo (left) */}
-          <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition">
-            <Image src="/kali.avif" alt="Kali Supplements Logo" width={32} height={32} />
-            <span className="font-semibold text-lg text-[var(--primary)]">Kali</span>
-          </Link>
-          {/* Customer Support Profile (right) */}
-          <div className="flex items-center space-x-2">
-            <span className="font-medium text-sm text-gray-700">{support.name}</span><Image src={support.img} alt={support.name} width={32} height={32} className="rounded-full" />
+    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] flex items-center justify-center ">
+      <div className="w-full h-lvh sm:max-w-xl sm:h-[90vh] sm:rounded-2xl bg-[var(--secondary)] shadow-lg overflow-hidden flex flex-col border border-gray-200">
 
+        {/* Header */}
+        <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-white/80 backdrop-blur-sm">
+          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition">
+            <Image src="/kali.avif" alt="Kali Supplements Logo" width={80} height={50} />
+          </Link>
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium text-gray-700">{support.name}</span>
+            <Avatar type="assistant" />
           </div>
         </div>
 
-
-        {/* Chat Area */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-[#ccc]">
-          {!sessionId && !loading && (
-            <div className="flex flex-col items-center justify-center h-full text-center text-sm text-gray-500 space-y-4">
-              <p className="max-w-sm">
-                👋 <strong>Welcome!</strong> We typically respond within{" "}
-                <span className="text-[var(--primary)] font-medium">2 minutes</span>. Feel free to start the conversation — we’re here to help.
-              </p>
-              <button
-                onClick={() => router.push("/")}
-                className="bg-[var(--primary)] hover:bg-green-700 text-white px-6 py-2 rounded-full text-sm transition-colors shadow-md"
-              >
-                Back to Homepage
-              </button>
-            </div>
-          )}
+        {/* Chat area */}
+        <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4 scrollbar-thin scrollbar-thumb-[#ccc]">
 
           {loading && !messages.length && (
             <div className="flex justify-center items-center h-full">
-              <div className="w-8 h-8 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin" />
+              <div className="w-6 h-6 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin" />
             </div>
           )}
 
@@ -136,14 +120,13 @@ export default function ChatPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                className={`flex gap-2 items-end ${msg.type === "user" ? "self-end flex-row-reverse" : "self-start"
-                  }`}
+                className={`flex gap-3 items-end ${msg.type === "user" ? "self-end flex-row-reverse" : "self-start"}`}
               >
                 {msg.type === "assistant" && <Avatar type={msg.type} />}
                 <div
-                  className={`px-4 py-3 text-sm max-w-xs rounded-2xl shadow-md ${msg.type === "user"
-                    ? "bg-[var(--primary)] text-white rounded-br-none"
-                    : "bg-[var(--card)] text-[var(--foreground)] rounded-bl-none"
+                  className={`px-4 py-2 text-sm leading-relaxed max-w-xs rounded-xl shadow ${msg.type === "user"
+                    ? "bg-[var(--primary)] text-white rounded-br-sm"
+                    : "bg-[var(--card)] text-[var(--foreground)] rounded-bl-sm"
                     }`}
                 >
                   {parseTextWithLinks(msg.text)}
@@ -158,11 +141,11 @@ export default function ChatPage() {
                 className="flex gap-2 items-end self-start"
               >
                 <Avatar type="assistant" />
-                <div className="px-4 py-3 bg-[var(--card)] text-[var(--foreground)] rounded-2xl rounded-bl-none shadow-md">
+                <div className="px-4 py-2 bg-[var(--card)] text-[var(--foreground)] rounded-xl rounded-bl-sm shadow">
                   <div className="flex items-center gap-1">
-                    <span className="w-2 h-2 bg-[var(--primary)] rounded-full animate-bounce [animation-delay:-0.3s]"></span>
-                    <span className="w-2 h-2 bg-[var(--primary)] rounded-full animate-bounce [animation-delay:-0.15s]"></span>
-                    <span className="w-2 h-2 bg-[var(--primary)] rounded-full animate-bounce"></span>
+                    <span className="w-2 h-2 bg-[var(--primary)] rounded-full animate-bounce [animation-delay:-0.3s]" />
+                    <span className="w-2 h-2 bg-[var(--primary)] rounded-full animate-bounce [animation-delay:-0.15s]" />
+                    <span className="w-2 h-2 bg-[var(--primary)] rounded-full animate-bounce" />
                   </div>
                 </div>
               </motion.div>
@@ -170,22 +153,22 @@ export default function ChatPage() {
           </AnimatePresence>
         </div>
 
-        {/* Input Box */}
+        {/* Input box */}
         {sessionId && (
-          <form className="flex items-center p-4 border-t border-gray-300 bg-[var(--secondary)]">
+          <form className="flex items-center gap-2 p-4 border-t border-gray-200 bg-white">
             <input
               value={input}
               required
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && sendMessage(e)}
-              className="flex-1 px-4 py-2 rounded-full bg-[#f9f9f9] text-sm text-[var(--foreground)] placeholder-gray-500 border border-gray-300 outline-none focus:ring-2 focus:ring-[var(--primary)]"
+              className="flex-1 px-4 py-2 rounded-full bg-[#f9f9f9] text-sm placeholder-gray-500 border border-gray-300 outline-none focus:ring-2 focus:ring-[var(--primary)] transition"
               placeholder="Ask me anything..."
             />
             <button
               onClick={(e) => sendMessage(e)}
-              className="ml-2 h-10 w-10 bg-[var(--primary)] hover:bg-green-700 text-white flex items-center justify-center cursor-pointer rounded-full text-sm transition-colors shadow-md"
+              className="h-10 w-10 bg-[var(--primary)] hover:bg-green-700 text-white flex items-center justify-center rounded-full shadow transition"
             >
-              <IoSend size={20} />
+              <IoSend size={18} />
             </button>
           </form>
         )}

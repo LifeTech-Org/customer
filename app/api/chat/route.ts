@@ -14,7 +14,7 @@ I'll ask you a few quick questions. Ready?
 
 export async function POST(req: Request) {
   const { message, sessionId } = await req.json();
-
+  console.log("start");
   let threadId = sessionId;
 
   // If no sessionId, create a new thread and include system prompt
@@ -37,19 +37,20 @@ export async function POST(req: Request) {
     role: "user",
     content: message,
   });
-
+  console.log("thread create");
   // Run the assistant on this thread
   const run = await openai.beta.threads.runs.create(threadId, {
     assistant_id: process.env.OPENAI_ASSISTANT_ID!,
   });
-
+  console.log("run start");
   // Wait for the assistant to finish
   let runStatus = await openai.beta.threads.runs.retrieve(threadId, run.id);
+  console.log(runStatus);
   while (runStatus.status !== "completed") {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     runStatus = await openai.beta.threads.runs.retrieve(threadId, run.id);
   }
-
+  console.log("run finish");
   // Get the latest messages
   const messages = await openai.beta.threads.messages.list(threadId);
 
