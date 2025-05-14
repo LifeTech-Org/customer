@@ -1,103 +1,138 @@
-import Image from "next/image";
+"use client"
+import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
+import { IoSend } from 'react-icons/io5'; // Import the send icon
 
-export default function Home() {
+type Chat = { type: 'user' | 'assistant'; text: string };
+
+export default function ChatPage() {
+  const [messages, setMessages] = useState<Chat[]>([]);
+  const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const sendMessageToAssistant = async (message: string) => {
+    setLoading(true);
+
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message }),
+    });
+
+    const data = await res.json();
+
+    setMessages((msgs) => [
+      ...msgs,
+      { type: 'assistant', text: data.reply },
+    ]);
+
+    setLoading(false);
+  };
+
+  const sendMessage = (e: any, msgOverride?: string) => {
+    e.preventDefault();
+    if (!input && !msgOverride) return;
+    setInput("")
+    setMessages((currentMsgs) => [...currentMsgs, { type: "user", text: msgOverride ?? input }])
+  }
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (messages[messages.length - 1]?.type === "user") {
+        sendMessageToAssistant(messages[messages.length - 1].text)
+      }
+    }, 5000)
+  }, [messages])
+
+  const Avatar = ({ type }: { type: 'user' | 'assistant' }) => (
+    <Image
+      src={type === 'user' ? '/mark.jpg' : '/elon.jpeg'}
+      alt={`${type} avatar`}
+      className="w-8 h-8 rounded-full object-cover shadow-md"
+      height={80}
+      width={80}
+    />
+  );
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] items-center flex">
+      <div className="w-full h-lvh sm:max-w-xl sm:h-[90vh] sm:mx-auto bg-[var(--secondary)] shadow-2xl sm:rounded-2xl overflow-hidden flex flex-col border border-gray-300">
+        <div className="px-6 py-4 font-semibold border-b border-gray-300 text-lg text-[var(--primary)]">
+          💬 Start the conversation
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        <div className="flex-1 overflow-y-auto p-6 space-y-5 scrollbar-thin scrollbar-thumb-[#ccc]">
+          {messages.length === 0 && !loading && (
+            <div className="flex flex-col items-center justify-center h-full text-center text-sm text-gray-500 space-y-4">
+              <p className="max-w-sm">
+                👋 <strong>Welcome!</strong> We typically respond within{' '}
+                <span className="text-[var(--primary)] font-medium">2 minutes</span>. Feel free to start the conversation — we’re here to help.
+              </p>
+              <button
+                onClick={(e) => sendMessage(e, "Hi")}
+                className="cursor-pointer bg-[var(--primary)] hover:bg-green-700 text-white px-6 py-2 rounded-full text-sm transition-colors shadow-md"
+              >
+                Say Hi
+              </button>
+            </div>
+          )}
+
+          <AnimatePresence initial={false}>
+            {messages.map((msg, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className={`flex items-end gap-3 ${msg.type === 'user' ? 'justify-end flex-row-reverse' : 'justify-start'}`}
+              >
+                <Avatar type={msg.type} />
+                <div
+                  className={`px-4 py-3 text-sm max-w-xs rounded-2xl shadow-md ${msg.type === 'user'
+                    ? 'bg-[var(--primary)] text-white rounded-br-none'
+                    : 'bg-[var(--card)] text-[var(--foreground)] rounded-bl-none'
+                    }`}
+                >
+                  {msg.text}
+                </div>
+              </motion.div>
+            ))}
+
+            {loading && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex items-center gap-3 justify-start"
+              >
+                <Avatar type="assistant" />
+                <div className="px-4 py-3 text-sm bg-[var(--card)] text-[var(--foreground)] rounded-2xl rounded-bl-none shadow-md">
+                  Typing...
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {
+          messages.length > 1 && <form className="flex items-center p-4 border-t border-gray-300 bg-[var(--secondary)]">
+            <input
+              value={input}
+              required
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && sendMessage(e)}
+              className="flex-1 px-4 py-2 rounded-full bg-[#f9f9f9] text-sm text-[var(--foreground)] placeholder-gray-500 border border-gray-300 outline-none focus:ring-2 focus:ring-[var(--primary)]"
+              placeholder="Ask me anything..."
+            />
+            <button
+              onClick={(e) => sendMessage(e)}
+              className="ml-2 h-10 w-10 bg-[var(--primary)] hover:bg-green-700 text-white flex items-center justify-center cursor-pointer rounded-full text-sm transition-colors shadow-md"
+            >
+              <IoSend size={20} />
+            </button>
+          </form>
+        }
+      </div>
     </div>
   );
 }
