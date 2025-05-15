@@ -42,7 +42,6 @@ export default function ChatPage() {
     const fetchMessages = async () => {
       const res = await fetch(`/api/chat?sessionId=${sessionId}`);
       const data = await res.json();
-      console.log(data)
       setMessages(data.messages || []);
       setLoading(false);
     };
@@ -50,9 +49,6 @@ export default function ChatPage() {
   }, [sessionId]);
 
   useEffect(() => {
-    if (bottomRef.current) {
-      bottomRef.current.scrollIntoView({ behavior: "smooth" });
-    }
     const last = messages[messages.length - 1];
     if (last?.type === "user") {
       const timeout = setTimeout(() => {
@@ -61,6 +57,18 @@ export default function ChatPage() {
       return () => clearTimeout(timeout);
     }
   }, [messages]);
+
+  useEffect(() => {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    if (loading && bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [loading]);
 
   const Avatar = ({ type }: { type: "user" | "assistant" }) => (
     <Image
@@ -162,8 +170,8 @@ export default function ChatPage() {
                 </div>
               </motion.div>
             )}
-            <div ref={bottomRef} />
           </AnimatePresence>
+          <div ref={bottomRef} />
         </div>
 
         {/* Input box */}
