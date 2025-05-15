@@ -72,7 +72,7 @@ export default function ChatPage() {
 
   const parseTextWithLinks = (text: string) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const parts = text.split(urlRegex);
+    const parts = text.replace(/\n+$/, "").split(urlRegex); // remove trailing newlines
     return parts.map((part, i) =>
       urlRegex.test(part) ? (
         <a
@@ -85,10 +85,18 @@ export default function ChatPage() {
           {part}
         </a>
       ) : (
-        <span key={i}>{part}</span>
+        <span key={i}>
+          {part.split("\n").map((line, j, arr) => (
+            <span key={j}>
+              {line}
+              {j < arr.length - 1 && <br />}
+            </span>
+          ))}
+        </span>
       )
     );
   };
+
 
   return (
     <div className="min-h-svh max-h-svh bg-[var(--background)] text-[var(--foreground)] flex items-center justify-center ">
@@ -126,8 +134,8 @@ export default function ChatPage() {
                 {msg.type === "assistant" && <Avatar type={msg.type} />}
                 <div
                   className={`px-4 py-2 text-sm leading-relaxed max-w-xs rounded-xl shadow ${msg.type === "user"
-                    ? "bg-[var(--primary)] text-white rounded-br-sm"
-                    : "bg-[var(--card)] text-[var(--foreground)] rounded-bl-sm"
+                    ? "bg-[var(--primary)] text-white rounded-br-none"
+                    : "bg-[var(--card)] text-[var(--foreground)] rounded-bl-none"
                     }`}
                 >
                   {parseTextWithLinks(msg.text)}
@@ -162,12 +170,12 @@ export default function ChatPage() {
               required
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && sendMessage(e)}
-              className="flex-1 px-4 py-2 rounded-full bg-[#f9f9f9] text-sm placeholder-gray-500 border border-gray-300 outline-none focus:ring-2 focus:ring-[var(--primary)] transition"
+              className="flex-1 px-4 py-2 rounded-full bg-[#f9f9f9] text-base placeholder-gray-500 border border-gray-300 outline-none focus:ring-2 focus:ring-[var(--primary)] transition"
               placeholder="Ask me anything..."
             />
             <button
               onClick={(e) => sendMessage(e)}
-              className="h-10 w-10 bg-[var(--primary)] hover:bg-green-700 text-white flex items-center justify-center rounded-full shadow transition"
+              className="h-12 w-12 cursor-pointer bg-[var(--primary)] hover:bg-green-700 text-white flex items-center justify-center rounded-full shadow transition"
             >
               <IoSend size={18} />
             </button>
