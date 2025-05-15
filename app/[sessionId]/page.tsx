@@ -83,7 +83,7 @@ export default function ChatPage() {
 
   const parseTextWithLinks = (text: string) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const parts = text.replace(/\n+$/, "").split(urlRegex); // remove trailing newlines
+    const parts = text.replace(/\n+$/, "").split(urlRegex);
     return parts.map((part, i) =>
       urlRegex.test(part) ? (
         <a
@@ -108,101 +108,9 @@ export default function ChatPage() {
     );
   };
 
-
-  return <div className="bg-[var(--background)] text-[var(--foreground)] flex items-center justify-center">
-    <div
-      className="fixed inset-0 sm:static sm:min-h-svh sm:max-h-svh w-full flex items-center justify-center"
-      style={{ zIndex: 0 }}
-    >
-      <div className="w-full h-full sm:max-w-xl sm:h-[90vh] sm:rounded-2xl bg-[var(--secondary)] shadow-lg overflow-hidden flex flex-col border border-gray-200">
-        {/* Header */}
-        <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-white/80 backdrop-blur-sm">
-          <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition">
-            <Image src="/kali.avif" alt="Kali Supplements Logo" width={80} height={50} />
-          </Link>
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-gray-700">{support.name}</span>
-            <Avatar type="assistant" />
-          </div>
-        </div>
-
-        {/* Chat area */}
-        <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4 scrollbar-thin scrollbar-thumb-[#ccc]">
-
-          {loading && !messages.length && (
-            <div className="flex justify-center items-center h-full">
-              <div className="w-6 h-6 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin" />
-            </div>
-          )}
-
-          <AnimatePresence initial={false}>
-            {messages.map((msg, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className={`flex gap-3 items-end ${msg.type === "user" ? "self-end flex-row-reverse" : "self-start"}`}
-              >
-                {msg.type === "assistant" && <Avatar type={msg.type} />}
-                <div
-                  className={`px-4 py-2 text-sm leading-relaxed max-w-xs rounded-xl shadow ${msg.type === "user"
-                    ? "bg-[var(--primary)] text-white rounded-br-none"
-                    : "bg-[var(--card)] text-[var(--foreground)] rounded-bl-none"
-                    }`}
-                >
-                  {parseTextWithLinks(msg.text)}
-                </div>
-              </motion.div>
-            ))}
-
-            {loading && messages.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex gap-2 items-end self-start"
-              >
-                <Avatar type="assistant" />
-                <div className="px-4 py-2 bg-[var(--card)] text-[var(--foreground)] rounded-xl rounded-bl-sm shadow">
-                  <div className="flex items-center gap-1">
-                    <span className="w-2 h-2 bg-[var(--primary)] rounded-full animate-bounce [animation-delay:-0.3s]" />
-                    <span className="w-2 h-2 bg-[var(--primary)] rounded-full animate-bounce [animation-delay:-0.15s]" />
-                    <span className="w-2 h-2 bg-[var(--primary)] rounded-full animate-bounce" />
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-          <div ref={bottomRef} />
-        </div>
-
-        {/* Input box */}
-        {sessionId && (
-          <form className="flex items-center gap-2 p-4 border-t border-gray-200 bg-white">
-            <input
-              value={input}
-              required
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && sendMessage(e)}
-              className="flex-1 px-4 py-2 rounded-full bg-[#f9f9f9] text-base placeholder-gray-500 border border-gray-300 outline-none focus:ring-2 focus:ring-[var(--primary)] transition"
-              placeholder="Ask me anything..."
-            />
-            <button
-              onClick={(e) => sendMessage(e)}
-              className="h-12 w-12 cursor-pointer bg-[var(--primary)] hover:bg-green-700 text-white flex items-center justify-center rounded-full shadow transition"
-            >
-              <IoSend size={18} />
-            </button>
-          </form>
-        )}
-      </div>
-    </div>
-  </div>
-
-
   return (
-    <div className="min-h-svh max-h-svh bg-[var(--background)] text-[var(--foreground)] flex items-center justify-center ">
-      <div className="w-full h-svh sm:max-w-xl sm:h-[90vh] sm:rounded-2xl bg-[var(--secondary)] shadow-lg overflow-hidden flex flex-col border border-gray-200">
+    <div className="fixed inset-0 bg-[var(--background)] text-[var(--foreground)] flex items-center justify-center">
+      <div className="relative w-full max-w-xl h-full sm:h-[90vh] sm:rounded-2xl bg-[var(--secondary)] shadow-lg overflow-hidden flex flex-col border border-gray-200">
 
         {/* Header */}
         <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-white/80 backdrop-blur-sm">
@@ -215,7 +123,7 @@ export default function ChatPage() {
           </div>
         </div>
 
-        {/* Chat area */}
+        {/* Chat messages */}
         <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4 scrollbar-thin scrollbar-thumb-[#ccc]">
 
           {loading && !messages.length && (
@@ -265,9 +173,12 @@ export default function ChatPage() {
           <div ref={bottomRef} />
         </div>
 
-        {/* Input box */}
+        {/* Input */}
         {sessionId && (
-          <form className="flex items-center gap-2 p-4 border-t border-gray-200 bg-white">
+          <form
+            onSubmit={(e) => sendMessage(e)}
+            className="flex items-center gap-2 p-4 border-t border-gray-200 bg-white"
+          >
             <input
               value={input}
               required
@@ -277,7 +188,7 @@ export default function ChatPage() {
               placeholder="Ask me anything..."
             />
             <button
-              onClick={(e) => sendMessage(e)}
+              type="submit"
               className="h-12 w-12 cursor-pointer bg-[var(--primary)] hover:bg-green-700 text-white flex items-center justify-center rounded-full shadow transition"
             >
               <IoSend size={18} />
