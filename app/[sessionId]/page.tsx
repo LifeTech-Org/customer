@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,7 +13,7 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Chat[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
+  const bottomRef = useRef<HTMLDivElement | null>(null);
   const params = useParams();
   const sessionId = params?.sessionId as string;
   const support = getSupportBySessionId(sessionId!);
@@ -50,6 +50,9 @@ export default function ChatPage() {
   }, [sessionId]);
 
   useEffect(() => {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }
     const last = messages[messages.length - 1];
     if (last?.type === "user") {
       const timeout = setTimeout(() => {
@@ -159,6 +162,7 @@ export default function ChatPage() {
                 </div>
               </motion.div>
             )}
+            <div ref={bottomRef} />
           </AnimatePresence>
         </div>
 
