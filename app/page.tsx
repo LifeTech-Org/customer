@@ -31,7 +31,7 @@ export default function HomePage() {
     };
 
     return (
-        <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] flex items-center justify-center px-4">
+        <div className="min-h-svh bg-[var(--background)] text-[var(--foreground)] flex items-center justify-center px-4">
             <div className="flex flex-col sm:flex-row items-center sm:items-stretch max-w-5xl w-full gap-6">
 
                 {/* Hero Image */}
@@ -73,9 +73,9 @@ export default function HomePage() {
                         </button>
 
                         {waiting && (
-                            <p className="text-xs text-gray-500 italic mt-2">
-                                Waiting for customer support...
-                            </p>
+                            <div className="flex w-full justify-center">
+                                <div className="w-6 h-6 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin" />
+                            </div>
                         )}
                     </div>
                 </div>
