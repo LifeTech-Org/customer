@@ -37,7 +37,7 @@ export default function HomePage() {
                 {/* Hero Image */}
                 <div className="relative w-full sm:w-1/2 h-64 sm:h-auto">
                     <Image
-                        src="/transresveratol.jpeg" // Replace with your image in /public
+                        src="/trans.jpeg" // Replace with your image in /public
                         alt="Trans-Resveratrol Bottles"
                         fill
                         className="object-cover rounded-2xl shadow-xl"
