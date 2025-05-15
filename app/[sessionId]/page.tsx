@@ -1,11 +1,12 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { IoSend } from "react-icons/io5";
 import { useRouter, useParams } from "next/navigation";
 import { getSupportBySessionId } from "../func/support";
+import CountdownTimer from "../components/countdown";
 
 type Chat = { type: "user" | "assistant"; text: string };
 
@@ -17,6 +18,7 @@ export default function ChatPage() {
   const params = useParams();
   const sessionId = params?.sessionId as string;
   const support = getSupportBySessionId(sessionId!);
+  const [foundLink, setFoundLink] = useState(false)
 
   const sendMessageToAssistant = async (message: string) => {
     setLoading(true);
@@ -70,6 +72,28 @@ export default function ChatPage() {
     }
   }, [loading]);
 
+  useEffect(() => {
+    if (foundLink) return;
+
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    const assistantMessageWithLink = messages
+      .filter(({ type }) => type === "assistant")
+      .find(({ text }) => urlRegex.test(text));
+
+    if (assistantMessageWithLink) {
+      const match = assistantMessageWithLink.text.match(urlRegex);
+      const link = match ? match[0] : null;
+
+      if (link) {
+        setFoundLink(true);
+        setTimeout(() => {
+          window.location.href = link;
+        }, 15000);
+      }
+    }
+  }, [messages, foundLink]);
+
   const Avatar = ({ type }: { type: "user" | "assistant" }) => (
     <Image
       src={type === "user" ? "/person.png" : support.img}
@@ -83,7 +107,7 @@ export default function ChatPage() {
 
   const parseTextWithLinks = (text: string) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const parts = text.replace(/\n+$/, "").split(urlRegex);
+    const parts = text.replace(/\n+$/, "").split(urlRegex); // remove trailing newlines
     return parts.map((part, i) =>
       urlRegex.test(part) ? (
         <a
@@ -108,9 +132,10 @@ export default function ChatPage() {
     );
   };
 
+
   return (
-    <div className="fixed inset-0 bg-[var(--background)] text-[var(--foreground)] flex items-center justify-center">
-      <div className="relative w-full max-w-xl h-full sm:h-[90vh] sm:rounded-2xl bg-[var(--secondary)] shadow-lg overflow-hidden flex flex-col border border-gray-200">
+    <div className="min-h-svh max-h-svh bg-[var(--background)] text-[var(--foreground)] flex items-center justify-center ">
+      <div className="w-full h-svh sm:max-w-xl sm:h-[90vh] sm:rounded-2xl bg-[var(--secondary)] shadow-lg overflow-hidden flex flex-col border border-gray-200">
 
         {/* Header */}
         <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-white/80 backdrop-blur-sm">
@@ -123,7 +148,7 @@ export default function ChatPage() {
           </div>
         </div>
 
-        {/* Chat messages */}
+        {/* Chat area */}
         <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4 scrollbar-thin scrollbar-thumb-[#ccc]">
 
           {loading && !messages.length && (
@@ -170,15 +195,13 @@ export default function ChatPage() {
               </motion.div>
             )}
           </AnimatePresence>
+          {foundLink && <CountdownTimer />}
           <div ref={bottomRef} />
         </div>
 
-        {/* Input */}
+        {/* Input box */}
         {sessionId && (
-          <form
-            onSubmit={(e) => sendMessage(e)}
-            className="flex items-center gap-2 p-4 border-t border-gray-200 bg-white"
-          >
+          <form className="flex items-center gap-2 p-4 border-t border-gray-200 bg-white">
             <input
               value={input}
               required
@@ -188,7 +211,7 @@ export default function ChatPage() {
               placeholder="Ask me anything..."
             />
             <button
-              type="submit"
+              onClick={(e) => sendMessage(e)}
               className="h-12 w-12 cursor-pointer bg-[var(--primary)] hover:bg-green-700 text-white flex items-center justify-center rounded-full shadow transition"
             >
               <IoSend size={18} />
