@@ -28,15 +28,19 @@ export async function POST(req: Request) {
         getSupportBySessionId(thread.id.split("_")[1]).name
       ),
     });
-  } else {
-    threadId = `thread_${sessionId}`;
+
+    return NextResponse.json({
+      sessionId: threadId.split("_")[1],
+    });
   }
 
-  // Add user's message to the thread
-  await openai.beta.threads.messages.create(threadId, {
-    role: "user",
-    content: message,
-  });
+  threadId = `thread_${sessionId}`;
+
+  // // Add user's message to the thread
+  // await openai.beta.threads.messages.create(threadId, {
+  //   role: "user",
+  //   content: message,
+  // });
   console.log("thread create");
   // Run the assistant on this thread
   const run = await openai.beta.threads.runs.create(threadId, {

@@ -42,6 +42,7 @@ export default function HomePage() {
                         fill
                         className="object-cover rounded-2xl shadow-xl"
                         priority
+                        objectFit="fill"
                     />
                 </div>
 
@@ -69,7 +70,7 @@ export default function HomePage() {
                             disabled={waiting}
                             className="px-6 py-2 rounded-full bg-[var(--primary)] cursor-pointer hover:bg-green-700 text-white shadow-md disabled:opacity-50 transition-colors"
                         >
-                            {waiting ? "The next available agent will connect with you shortly…" : "Connect With a Live Agent Now"}
+                            {waiting ? "The next available agent will connect with you shortly…" : "Connect With a Live Agent"}
                         </button>
 
                         {waiting && (
