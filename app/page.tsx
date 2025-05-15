@@ -27,44 +27,57 @@ export default function HomePage() {
                 alert("Failed to start chat session");
                 setWaiting(false);
             }
-        }, Math.floor(Math.random() * 10000))
+        }, 1)
     };
 
     return (
-        <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] items-center flex">
-            <div className="w-full h-lvh sm:max-w-xl sm:h-auto sm:mx-auto bg-[var(--secondary)] shadow-2xl sm:rounded-2xl overflow-hidden flex flex-col border border-gray-300">
+        <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] flex items-center justify-center px-4">
+            <div className="flex flex-col sm:flex-row items-center sm:items-stretch max-w-5xl w-full gap-6">
 
-                {/* Header */}
-                <div className="px-6 py-4 flex justify-center border-b border-gray-300">
-                    <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition">
-                        <Image src="/kali.avif" alt="Company Logo" width={100} height={60} className="rounded" />
-                        {/* <span className="font-bold text-lg text-[var(--primary)]">Kali Supplements</span> */}
-                    </Link>
+                {/* Hero Image */}
+                <div className="relative w-full sm:w-1/2 h-64 sm:h-auto">
+                    <Image
+                        src="/transresveratol.jpeg" // Replace with your image in /public
+                        alt="Trans-Resveratrol Bottles"
+                        fill
+                        className="object-cover rounded-2xl shadow-xl"
+                        priority
+                    />
                 </div>
 
-                {/* Body Content */}
-                <div className="flex-1 p-6 space-y-6 flex flex-col justify-center items-center text-center">
-                    <h1 className="text-xl font-bold text-[var(--primary)] underline">
-                        Longetivity Pre-Qualification
-                    </h1>
-                    <p className="text-sm text-gray-600 max-w-sm">
-                        We typically respond within{" "}
-                        <span className="text-[var(--primary)] font-medium">30 seconds</span>. Click below to start chatting with us!
-                    </p>
+                {/* CTA Panel */}
+                <div className="w-full sm:w-1/2 bg-[var(--secondary)] shadow-2xl rounded-2xl border border-gray-300 flex flex-col overflow-hidden">
 
-                    <button
-                        onClick={handleStart}
-                        disabled={waiting}
-                        className="px-6 py-2 rounded-full bg-[var(--primary)] cursor-pointer hover:bg-green-700 text-white shadow-md disabled:opacity-50 transition-colors"
-                    >
-                        {waiting ? "Please wait…" : "Send Hi"}
-                    </button>
+                    {/* Header */}
+                    <div className="px-6 py-4 flex justify-center border-b border-gray-300">
+                        <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition">
+                            <Image src="/kali.avif" alt="Company Logo" width={150} height={100} className="rounded" />
+                        </Link>
+                    </div>
 
-                    {waiting && (
-                        <p className="text-xs text-gray-500 italic mt-2">
-                            Waiting for customer support...
+                    {/* Body Content */}
+                    <div className="flex-1 p-6 space-y-6 flex flex-col justify-center items-center text-center">
+                        <h1 className="text-xl font-bold text-[var(--primary)] underline">
+                            Longevity Pre-Qualification
+                        </h1>
+                        <p className="text-sm text-gray-600 max-w-md">
+                            Our Customer Care Team is Ready to Help You Qualify for Our Most Powerful Longevity Formula. Just answer a few quick questions — takes less than 60 seconds — and we'll match you with the best option.
                         </p>
-                    )}
+
+                        <button
+                            onClick={handleStart}
+                            disabled={waiting}
+                            className="px-6 py-2 rounded-full bg-[var(--primary)] cursor-pointer hover:bg-green-700 text-white shadow-md disabled:opacity-50 transition-colors"
+                        >
+                            {waiting ? "The next available agent will connect with you shortly…" : "Connect With a Live Agent Now"}
+                        </button>
+
+                        {waiting && (
+                            <p className="text-xs text-gray-500 italic mt-2">
+                                Waiting for customer support...
+                            </p>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
