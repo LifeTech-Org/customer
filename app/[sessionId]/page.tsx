@@ -90,7 +90,7 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)] flex items-center justify-center ">
+    <div className="min-h-svh bg-[var(--background)] text-[var(--foreground)] flex items-center justify-center ">
       <div className="w-full h-svh sm:max-w-xl sm:h-[90vh] sm:rounded-2xl bg-[var(--secondary)] shadow-lg overflow-hidden flex flex-col border border-gray-200">
 
         {/* Header */}
