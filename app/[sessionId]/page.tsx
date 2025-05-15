@@ -110,8 +110,8 @@ export default function ChatPage() {
 
 
   return (
-    <div className="min-h-svh max-h-svh bg-[var(--background)] text-[var(--foreground)] flex items-center justify-center ">
-      <div className="w-full h-svh sm:max-w-xl sm:h-[90vh] sm:rounded-2xl bg-[var(--secondary)] shadow-lg overflow-hidden flex flex-col border border-gray-200">
+    <div className="min-h-dvh max-h-dvh bg-[var(--background)] text-[var(--foreground)] flex items-center justify-center ">
+      <div className="w-full h-dvh sm:max-w-xl sm:h-[90vh] sm:rounded-2xl bg-[var(--secondary)] shadow-lg overflow-hidden flex flex-col border border-gray-200">
 
         {/* Header */}
         <div className="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-white/80 backdrop-blur-sm">
