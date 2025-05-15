@@ -31,7 +31,7 @@ export default function HomePage() {
     };
 
     return (
-        <div className="min-h-dvh bg-[var(--background)] text-[var(--foreground)] flex items-center justify-center px-4">
+        <div className="min-h-svh max-h-svh bg-[var(--background)] text-[var(--foreground)] flex items-center justify-center px-4">
             <div className="flex flex-col sm:flex-row items-center sm:items-stretch max-w-5xl w-full gap-6">
 
                 {/* Hero Image */}

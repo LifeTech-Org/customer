@@ -36,11 +36,11 @@ export async function POST(req: Request) {
 
   threadId = `thread_${sessionId}`;
 
-  // // Add user's message to the thread
-  // await openai.beta.threads.messages.create(threadId, {
-  //   role: "user",
-  //   content: message,
-  // });
+  // Add user's message to the thread
+  await openai.beta.threads.messages.create(threadId, {
+    role: "user",
+    content: message,
+  });
   console.log("thread create");
   // Run the assistant on this thread
   const run = await openai.beta.threads.runs.create(threadId, {
