@@ -28,3 +28,16 @@ body {
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee {
+  animation: scroll-left 20s linear infinite;
+}

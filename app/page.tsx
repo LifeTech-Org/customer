@@ -35,16 +35,29 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row items-center sm:items-stretch max-w-5xl w-full gap-6">
 
                 {/* Hero Image */}
-                <div className="relative w-full sm:w-1/2 h-64 sm:h-auto">
+                <div className="flex w-full sm:w-1/2 relative rounded-2xl overflow-hidden shadow-xl">
                     <Image
-                        src="/trans.jpeg" // Replace with your image in /public
+                        src="/trans.jpeg"
                         alt="Trans-Resveratrol Bottles"
                         fill
-                        className="object-cover rounded-2xl shadow-xl"
+                        className="object-cover"
                         priority
-                        objectFit="fill"
                     />
+
+                    {/* Marquee banner on top of image */}
+                    <div className="absolute top-0 left-0 w-full bg-[var(--primary)] overflow-hidden z-10 h-10">
+                        <div className="marquee flex whitespace-nowrap text-white text-sm font-medium gap-12 px-4 h-10 items-center">
+                            <span>#1 Resveratrol Formula on TikTok</span>
+                            <span>• Trusted by 20,000+ customers</span>
+                            <span>• FDA-certified lab</span>
+                            <span>#1 Resveratrol Formula on TikTok</span>
+                            <span>• Trusted by 20,000+ customers</span>
+                            <span>• FDA-certified lab</span>
+                        </div>
+                    </div>
                 </div>
+
+
 
                 {/* CTA Panel */}
                 <div className="w-full sm:w-1/2 bg-[var(--secondary)] shadow-2xl rounded-2xl border border-gray-300 flex flex-col overflow-hidden">
@@ -62,15 +75,37 @@ export default function HomePage() {
                             Longevity Pre-Qualification
                         </h1>
                         <p className="text-sm text-gray-600 max-w-md">
-                            Our Customer Care Team is Ready to Help You Qualify for Our Most Powerful Longevity Formula. Just answer a few quick questions — takes less than 60 seconds — and we'll match you with the best option.
+                            Our Longevity Team Will Help You Qualify in Seconds.
+                            Only a handful of people qualify for this level of anti-aging support. If you’re tired of feeling foggy, sluggish, or off your game — now’s your moment.
+                            Answer 3 quick questions and see if your body qualifies. You’ll know in under a minute.
                         </p>
+                        <style jsx>{`
+    @keyframes arrow-slide {
+        0% { transform: translateX(0); }
+        50% { transform: translateX(6px); }
+        100% { transform: translateX(0); }
+    }
+`}</style>
 
                         <button
                             onClick={handleStart}
                             disabled={waiting}
-                            className="px-6 py-2 rounded-full bg-[var(--primary)] cursor-pointer hover:bg-green-700 text-white shadow-md disabled:opacity-50 transition-colors"
+                            className={`group relative px-6 py-2 rounded-full bg-[var(--primary)] text-white shadow-md transition-all duration-300 ease-in-out
+        ${waiting ? 'opacity-50 cursor-default' : 'hover:shadow-[0_0_12px_rgba(0,255,150,0.5)] cursor-pointer'}
+    `}
                         >
-                            {waiting ? "The next available agent will connect with you shortly…" : "Connect With a Live Agent"}
+                            <span className="flex items-center justify-center gap-2">
+                                {waiting ? (
+                                    "The next available agent will connect with you shortly…"
+                                ) : (
+                                    <>
+                                        I’m Ready to Qualify Now
+                                        <span className="inline-block ml-1 animate-[arrow-slide_1.2s_ease-in-out_infinite]">
+                                            ➜
+                                        </span>
+                                    </>
+                                )}
+                            </span>
                         </button>
 
                         {waiting && (

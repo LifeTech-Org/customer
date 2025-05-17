@@ -89,7 +89,7 @@ export default function ChatPage() {
         setFoundLink(true);
         setTimeout(() => {
           window.location.href = link;
-        }, 15000);
+        }, 90000);
       }
     }
   }, [messages, foundLink]);

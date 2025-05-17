@@ -19,8 +19,11 @@ export default function CountdownTimer({ seconds = 900 }: { seconds?: number }) 
     if (timeLeft <= 0) return null;
 
     return (
-        <div className="w-full flex justify-center z-50 pointer-events-none">
-            <div className="bg-gradient-to-r from-gray-900 via-black to-gray-900 text-white font-mono text-lg px-6 py-2 rounded-full shadow-lg border border-gray-700 backdrop-blur-sm">
+        <div className="w-full flex flex-col items-center z-50 pointer-events-none space-y-2">
+            <div className="text-sm text-red-400 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm border border-gray-200">
+                Due to high demand, your recommendation is reserved for a limited time.
+            </div>
+            <div className="text-gray-800 font-mono text-lg px-5 py-1.5 rounded-full shadow-sm border border-gray-300 bg-white/90 backdrop-blur-sm">
                 <span className="tracking-widest">{formatTime(timeLeft)}</span>
             </div>
         </div>
