@@ -27,95 +27,84 @@ export default function HomePage() {
                 alert("Failed to start chat session");
                 setWaiting(false);
             }
-        }, 1)
+        }, 1);
     };
 
     return (
-        <div className="min-h-svh max-h-svh bg-[var(--background)] text-[var(--foreground)] flex items-center justify-center px-4">
-            <div className="flex flex-col sm:flex-row items-center sm:items-stretch max-w-5xl w-full gap-6">
+        <div className="min-h-svh max-h-svh bg-[var(--background)] text-[var(--foreground)] flex flex-col overflow-x-hidden">
+            {/* Marquee */}
+            <div className="banner flex items-center gap-12 px-4 select-none text-white bg-[var(--primary)] font-[500] text-sm leading-[36px] h-[40px] overflow-hidden relative whitespace-nowrap">
+                {Array(12).fill(0).flatMap((_, i) => (
+                    [
+                        <div key={`resveratrol-${i}`}>#1 Resveratrol Formula on TikTok</div>,
+                        <div key={`trusted-${i}`}>Trusted by 20,000+ customers — FDA-certified lab</div>
+                    ]
+                ))}
+            </div>
 
-                {/* Hero Image */}
-                <div className="flex w-full sm:w-1/2 relative rounded-2xl overflow-hidden shadow-xl">
-                    <Image
-                        src="/trans.jpeg"
-                        alt="Trans-Resveratrol Bottles"
-                        fill
-                        className="object-cover"
-                        priority
-                    />
 
-                    {/* Marquee banner on top of image */}
-                    <div className="absolute top-0 left-0 w-full bg-[var(--primary)] overflow-hidden z-10 h-10">
-                        <div className="marquee flex whitespace-nowrap text-white text-sm font-medium gap-12 px-4 h-10 items-center">
-                            <span>#1 Resveratrol Formula on TikTok</span>
-                            <span>• Trusted by 20,000+ customers</span>
-                            <span>• FDA-certified lab</span>
-                            <span>#1 Resveratrol Formula on TikTok</span>
-                            <span>• Trusted by 20,000+ customers</span>
-                            <span>• FDA-certified lab</span>
+            {/* Main content */}
+            <div className="flex items-center justify-center px-4 flex-1">
+                <div className="flex flex-col sm:flex-row items-center sm:items-stretch max-w-5xl w-full gap-6">
+                    {/* Hero Image */}
+                    <div className="relative w-full sm:w-1/2 h-64 sm:h-auto">
+                        <Image
+                            src="/trans.jpeg"
+                            alt="Trans-Resveratrol Bottles"
+                            fill
+                            className="object-cover rounded-2xl shadow-xl"
+                            priority
+                            style={{ objectFit: "fill" }}
+                        />
+                    </div>
+
+                    {/* CTA Panel */}
+                    <div className="w-full sm:w-1/2 bg-[var(--secondary)] shadow-2xl rounded-2xl border border-gray-300 flex flex-col overflow-hidden">
+                        {/* Header */}
+                        <div className="px-6 py-4 flex justify-center border-b border-gray-300">
+                            <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition">
+                                <Image src="/kali.avif" alt="Company Logo" width={150} height={100} className="rounded" />
+                            </Link>
+                        </div>
+
+                        {/* Body Content */}
+                        <div className="flex-1 p-6 space-y-6 flex flex-col justify-center items-center text-center">
+                            <h1 className="text-xl font-bold text-[var(--primary)] underline">Longevity Pre-Qualification</h1>
+                            <p className="text-sm text-gray-600 max-w-md">
+                                Our Longevity Team Will Help You Qualify in Seconds. Only a handful of people qualify for this level
+                                of anti-aging support. If you’re tired of feeling foggy, sluggish, or off your game — now’s your
+                                moment. Answer 3 quick questions and see if your body qualifies. You’ll know in under a minute.
+                            </p>
+
+                            <button
+                                onClick={handleStart}
+                                disabled={waiting}
+                                className={`group relative px-6 py-2 rounded-full bg-[var(--primary)] text-white shadow-md transition-all duration-300 ease-in-out
+                            ${waiting ? 'opacity-50 cursor-default' : 'hover:shadow-[0_0_12px_rgba(0,255,150,0.5)] cursor-pointer'}`}
+                            >
+                                <span className="flex items-center justify-center gap-2">
+                                    {waiting ? (
+                                        "The next available agent will connect with you shortly…"
+                                    ) : (
+                                        <>
+                                            I’m Ready to Qualify Now
+                                            <span className="inline-block ml-1 animate-[arrow-slide_1.2s_ease-in-out_infinite]">
+                                                ➜
+                                            </span>
+                                        </>
+                                    )}
+                                </span>
+                            </button>
+
+                            {waiting && (
+                                <div className="flex w-full justify-center">
+                                    <div className="w-6 h-6 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin" />
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
-
-
-
-                {/* CTA Panel */}
-                <div className="w-full sm:w-1/2 bg-[var(--secondary)] shadow-2xl rounded-2xl border border-gray-300 flex flex-col overflow-hidden">
-
-                    {/* Header */}
-                    <div className="px-6 py-4 flex justify-center border-b border-gray-300">
-                        <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition">
-                            <Image src="/kali.avif" alt="Company Logo" width={150} height={100} className="rounded" />
-                        </Link>
-                    </div>
-
-                    {/* Body Content */}
-                    <div className="flex-1 p-6 space-y-6 flex flex-col justify-center items-center text-center">
-                        <h1 className="text-xl font-bold text-[var(--primary)] underline">
-                            Longevity Pre-Qualification
-                        </h1>
-                        <p className="text-sm text-gray-600 max-w-md">
-                            Our Longevity Team Will Help You Qualify in Seconds.
-                            Only a handful of people qualify for this level of anti-aging support. If you’re tired of feeling foggy, sluggish, or off your game — now’s your moment.
-                            Answer 3 quick questions and see if your body qualifies. You’ll know in under a minute.
-                        </p>
-                        <style jsx>{`
-    @keyframes arrow-slide {
-        0% { transform: translateX(0); }
-        50% { transform: translateX(6px); }
-        100% { transform: translateX(0); }
-    }
-`}</style>
-
-                        <button
-                            onClick={handleStart}
-                            disabled={waiting}
-                            className={`group relative px-6 py-2 rounded-full bg-[var(--primary)] text-white shadow-md transition-all duration-300 ease-in-out
-        ${waiting ? 'opacity-50 cursor-default' : 'hover:shadow-[0_0_12px_rgba(0,255,150,0.5)] cursor-pointer'}
-    `}
-                        >
-                            <span className="flex items-center justify-center gap-2">
-                                {waiting ? (
-                                    "The next available agent will connect with you shortly…"
-                                ) : (
-                                    <>
-                                        I’m Ready to Qualify Now
-                                        <span className="inline-block ml-1 animate-[arrow-slide_1.2s_ease-in-out_infinite]">
-                                            ➜
-                                        </span>
-                                    </>
-                                )}
-                            </span>
-                        </button>
-
-                        {waiting && (
-                            <div className="flex w-full justify-center">
-                                <div className="w-6 h-6 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin" />
-                            </div>
-                        )}
-                    </div>
-                </div>
             </div>
-        </div>
+        </div >
     );
 }

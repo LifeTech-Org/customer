@@ -29,15 +29,33 @@ body {
   background: transparent;
 }
 
-@keyframes scroll-left {
+@keyframes arrow-slide {
   0% {
-    transform: translateX(0%);
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(6px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.banner {
+  min-width: 200vw; /* 2x viewport for continuous scroll */
+  animation: bannermove 40s linear infinite;
+  user-select: none;
+}
+
+.banner:hover {
+  animation-play-state: paused;
+}
+
+@keyframes bannermove {
+  0% {
+    transform: translateX(0);
   }
   100% {
     transform: translateX(-50%);
   }
-}
-
-.marquee {
-  animation: scroll-left 20s linear infinite;
 }
