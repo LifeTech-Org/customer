@@ -54,9 +54,9 @@ export default function HomePage() {
     };
 
     return (
-        <div className="min-h-svh max-h-svh bg-[var(--background)] text-[var(--foreground)] flex flex-col overflow-x-hidden">
+        <div className="min-h-svh sm:max-h-svh pb-8 sm:pb-0 bg-[var(--background)] text-[var(--foreground)] flex flex-col overflow-x-hidden">
             {/* Marquee */}
-            <div className="banner flex items-center gap-12 px-4 select-none text-white bg-[var(--primary)] font-[500] text-sm leading-[36px] h-[40px] overflow-hidden relative whitespace-nowrap">
+            <div className="banner flex items-center gap-12 px-4 select-none text-white bg-[var(--primary)] font-sm text-sm h-10 overflow-hidden relative whitespace-nowrap">
                 {Array(12).fill(0).flatMap((_, i) => (
                     [
                         <div key={`resveratrol-${i}`}>#1 Resveratrol Formula on TikTok</div>,
@@ -66,7 +66,7 @@ export default function HomePage() {
             </div>
 
             {/* Main content */}
-            <div className="flex items-center justify-center px-4 flex-1">
+            <div className="flex items-center justify-center px-4 flex-1 mt-6 sm:mt-0">
                 <div className="flex flex-col sm:flex-row items-center sm:items-stretch max-w-5xl w-full gap-6">
                     {/* Hero Image */}
                     <div className="relative w-full sm:w-1/2 h-64 sm:h-auto">
