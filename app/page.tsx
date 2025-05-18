@@ -69,9 +69,9 @@ export default function HomePage() {
             <div className="flex items-center justify-center px-4 flex-1 mt-6 sm:mt-0">
                 <div className="flex flex-col sm:flex-row items-center sm:items-stretch max-w-5xl w-full gap-6">
                     {/* Hero Image */}
-                    <div className="relative w-full sm:w-1/2 h-64 sm:h-auto">
+                    <div className="relative w-full sm:w-1/2 h-96 sm:h-auto">
                         <Image
-                            src="/trans.jpeg"
+                            src="/bg.png"
                             alt="Trans-Resveratrol Bottles"
                             fill
                             className="object-cover rounded-2xl shadow-xl"

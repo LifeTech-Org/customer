@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "kali Supplements",
+
 };
 
 export default function RootLayout({
