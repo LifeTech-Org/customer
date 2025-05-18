@@ -1,12 +1,33 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { toast } from 'sonner';
+
 
 export default function HomePage() {
     const [waiting, setWaiting] = useState(false);
+    const [minutes, setMinutes] = useState(3);
+    const [seconds, setSeconds] = useState(0);
     const router = useRouter();
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (seconds === 0) {
+                if (minutes === 0) {
+                    setMinutes(3);
+                    setSeconds(0);
+                } else {
+                    setMinutes(m => m - 1);
+                    setSeconds(59);
+                }
+            } else {
+                setSeconds(s => s - 1);
+            }
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [minutes, seconds]);
 
     const handleStart = async () => {
         setWaiting(true);
@@ -24,7 +45,9 @@ export default function HomePage() {
                 setWaiting(false);
                 router.push(`/${sessionId}`);
             } else {
-                alert("Failed to start chat session");
+                toast.error("Failed to start chat session. Please try again.", {
+                    description: "If the issue persists, contact support.",
+                });
                 setWaiting(false);
             }
         }, 1);
@@ -41,7 +64,6 @@ export default function HomePage() {
                     ]
                 ))}
             </div>
-
 
             {/* Main content */}
             <div className="flex items-center justify-center px-4 flex-1">
@@ -76,6 +98,11 @@ export default function HomePage() {
                                 moment. Answer 3 quick questions and see if your body qualifies. You’ll know in under a minute.
                             </p>
 
+                            {/* Countdown Timer */}
+                            <p className="text-sm text-red-600 font-semibold">
+                                Agent slots are limited — next spot resets in [{minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}]
+                            </p>
+
                             <button
                                 onClick={handleStart}
                                 disabled={waiting}
@@ -105,6 +132,6 @@ export default function HomePage() {
                     </div>
                 </div>
             </div>
-        </div >
+        </div>
     );
 }
