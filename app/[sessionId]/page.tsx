@@ -107,7 +107,9 @@ export default function ChatPage() {
 
   const parseTextWithLinks = (text: string) => {
     const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const parts = text.replace(/\n+$/, "").split(urlRegex); // remove trailing newlines
+    const cleanedText = text.replace(/^\n+|\n+$/g, ""); // remove leading and trailing newlines only
+    const parts = cleanedText.split(urlRegex);
+
     return parts.map((part, i) =>
       urlRegex.test(part) ? (
         <a
@@ -131,6 +133,7 @@ export default function ChatPage() {
       )
     );
   };
+
 
 
   return (
