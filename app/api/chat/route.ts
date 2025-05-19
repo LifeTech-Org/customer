@@ -7,9 +7,7 @@ import { getSupportBySessionId } from "@/app/func/support";
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const SYSTEM_PROMPT = (name: string) => `
-Hi there — welcome to Kali Supplements! My name is ${name}, and I'm here to guide you. 
-Let's see if our Longevity Formula is right for you.
-I'll ask you a few quick questions. Ready?
+Hey — welcome to Kali Supplements! I’m ${name}. Before we get started, what’s your name, age, and where are you from?
 `;
 
 export async function POST(req: Request) {

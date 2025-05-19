@@ -156,7 +156,6 @@ export default function ChatPage() {
               <div className="w-6 h-6 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin" />
             </div>
           )}
-
           <AnimatePresence initial={false}>
             {messages.map((msg, index) => (
               <motion.div
