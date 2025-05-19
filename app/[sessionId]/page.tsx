@@ -166,7 +166,7 @@ export default function ChatPage() {
                 exit={{ opacity: 0 }}
                 className={`flex gap-3 items-end ${msg.type === "user" ? "self-end flex-row-reverse" : "self-start"}`}
               >
-                {/* {msg.type === "assistant" && <Avatar type={msg.type} />} */}
+                {msg.type === "assistant" && <Avatar type={msg.type} />}
                 <div
                   className={`px-4 py-2 text-sm leading-relaxed max-w-xs rounded-xl shadow ${msg.type === "user"
                     ? "bg-[var(--primary)] text-white rounded-br-none"

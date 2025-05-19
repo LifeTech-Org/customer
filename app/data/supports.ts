@@ -1,22 +1,22 @@
 export const supports = [
   {
+    name: "Claire",
+    img: "/claire.png",
+  },
+  {
     name: "Emma",
-    img: "/elon.jpeg",
+    img: "/emma.png",
   },
   {
-    name: "Ryan",
-    img: "/mark.jpg",
+    name: "James",
+    img: "/james.png",
   },
   {
-    name: "Zendaya",
-    img: "/elon.jpeg",
+    name: "John",
+    img: "/john.png",
   },
   {
-    name: "Chris",
-    img: "/mark.jpg",
-  },
-  {
-    name: "Scarlett",
-    img: "/elon.jpeg",
+    name: "Leah",
+    img: "/leah.png",
   },
 ];
