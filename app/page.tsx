@@ -54,7 +54,7 @@ export default function HomePage() {
     };
 
     return (
-        <div className="min-h-svh sm:max-h-svh pb-8 sm:pb-0 bg-[var(--background)] text-[var(--foreground)] flex flex-col overflow-x-hidden">
+        <div className="min-h-svh pb-8 bg-[var(--background)] text-[var(--foreground)] flex flex-col overflow-x-hidden">
             {/* Marquee */}
             <div className="banner flex items-center gap-12 px-4 select-none text-white bg-[var(--primary)] font-sm text-sm h-10 overflow-hidden relative whitespace-nowrap">
                 {Array(12).fill(0).flatMap((_, i) => (
@@ -66,22 +66,22 @@ export default function HomePage() {
             </div>
 
             {/* Main content */}
-            <div className="flex items-center justify-center px-4 flex-1 mt-6 sm:mt-0">
-                <div className="flex flex-col sm:flex-row items-center sm:items-stretch max-w-5xl w-full gap-6">
+            <div className="flex items-center justify-center px-4 flex-1 mt-6">
+                <div className="flex flex-col max-w-xl w-full gap-6">
                     {/* Hero Image */}
-                    <div className="relative w-full sm:w-1/2 h-96 sm:h-auto">
+                    <div className="relative w-full h-fit sm:h-auto rounded-2xl">
                         <Image
                             src="/bg.png"
                             alt="Trans-Resveratrol Bottles"
-                            fill
-                            className="object-cover rounded-2xl shadow-xl"
+                            width={1000}
+                            height={300}
+                            className="rounded-2xl shadow-xl w-full"
                             priority
-                            style={{ objectFit: "fill" }}
                         />
                     </div>
 
                     {/* CTA Panel */}
-                    <div className="w-full sm:w-1/2 bg-[var(--secondary)] shadow-2xl rounded-2xl border border-gray-300 flex flex-col overflow-hidden">
+                    <div className="w-full bg-[var(--secondary)] shadow-2xl rounded-2xl border border-gray-300 flex flex-col overflow-hidden">
                         {/* Header */}
                         <div className="px-6 py-4 flex justify-center border-b border-gray-300">
                             <Link href="/" className="flex items-center space-x-2 hover:opacity-80 transition">
